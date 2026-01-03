@@ -75,28 +75,6 @@ entity → modelo representando a tabela
 
 ---
 
-## 📘 Diagrama UML – Entidade `Usuario`
-
-
-+----------------------+
-|      Usuario         |
-+----------------------+
-| - id: Long           |
-| - nome: String       |
-| - email: String      |
-| - idade: Integer     |
-+----------------------+
-| + getId()            |
-| + getNome()          |
-| + getEmail()         |
-| + getIdade()         |
-| + setId()            |
-| + setNome()          |
-| + setEmail()         |
-| + setIdade()         |
-+----------------------+
-
----
 
 ## 🔄 Fluxo do CRUD
 
