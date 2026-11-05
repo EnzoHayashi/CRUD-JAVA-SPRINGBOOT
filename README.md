@@ -1,174 +1,148 @@
-# 📘 Cadastro de Usuários – API CRUD  
+# API REST de Cadastro de Usuários
 
-![Java](https://img.shields.io/badge/Java-17+-red)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-brightgreen)
-![Maven](https://img.shields.io/badge/Maven-Build-blue)
+![Java](https://img.shields.io/badge/Java-25-red)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5.8-brightgreen)
+![Maven](https://img.shields.io/badge/Build-Maven-blue)
 ![H2](https://img.shields.io/badge/Database-H2-yellow)
-![Status](https://img.shields.io/badge/Status-Ativo-success)
 
----
+API REST para gerenciamento de usuários (CRUD), desenvolvida com Java e Spring Boot, organizada em camadas e com persistência via Spring Data JPA.
 
-## 📝 Sobre o projeto
+## Objetivo e contexto
 
-Este projeto é uma **API REST** desenvolvida em **Java + Spring Boot** para gerenciamento de usuários através de operações CRUD (Create, Read, Update, Delete).
+Projeto acadêmico e de estudo, criado para desenvolver competências em back-end: construção de APIs REST, organização em camadas, orientação a objetos e persistência de dados com JPA.
 
-Tecnologias usadas:
+## Funcionalidades
 
-- Java 25 (JDK 25)
-- Spring Boot
-- H2 Database
-- Spring Data JPA
-- Lombok
-- Maven
+- Criar usuários
+- Listar todos os usuários
+- Buscar usuário por ID
+- Atualizar dados de um usuário
+- Excluir usuários
+- Console web do H2 habilitado para inspeção do banco
 
-prática de back-end e demonstração de API REST.
+## Arquitetura e organização do código
 
----
+A aplicação segue o padrão em camadas, em que cada camada tem uma responsabilidade única:
 
-## 🚀 Funcionalidades
+```
+Cliente HTTP
+     │
+     ▼
+Controller   (UsuarioController)  → recebe as requisições HTTP e devolve as respostas
+     │
+     ▼
+Service      (UsuarioService)     → concentra as regras de negócio
+     │
+     ▼
+Repository   (UsuarioRepository)  → acesso ao banco via Spring Data JPA
+     │
+     ▼
+Entity       (Usuario)            → modelo mapeado para a tabela
+     │
+     ▼
+H2 Database (em memória)
+```
 
-- Criar usuários  
-- Listar todos os usuários  
-- Buscar usuário por ID  
-- Atualizar dados  
-- Excluir usuários  
-- Persistência via Spring Data JPA  
-- Console H2 ativado  
+## Tecnologias e decisões técnicas
 
----
+| Tecnologia | Uso | Motivo da escolha |
+|---|---|---|
+| Java 25 / Spring Boot 3.5.8 | Base da aplicação | Stack amplamente usada em back-end corporativo |
+| Spring Web | Endpoints REST | Exposição das operações do CRUD via HTTP |
+| Spring Data JPA | Persistência | Reduz o código de acesso a dados e abstrai o SQL |
+| H2 (em memória) | Banco de dados | Não exige instalação nem configuração; ambiente limpo a cada execução (`ddl-auto=create-drop`) |
+| Lombok | Redução de código repetitivo | Evita getters, setters e construtores escritos manualmente |
+| Maven (com Maven Wrapper) | Build | O `mvnw` dispensa a instalação prévia do Maven |
 
-## 🧩 Arquitetura
+**Trade-off:** como o H2 roda em memória, os dados são perdidos ao encerrar a aplicação. Isso é adequado para estudo e demonstração, mas não para uso real.
 
-A aplicação segue o padrão em camadas:
+## Como executar
 
-controller → recebe requisições HTTP
-service → regras de negócio
-repository → operações no banco de dados
-entity → modelo representando a tabela
+**Pré-requisitos:** JDK 25 (versão definida no `pom.xml`) e Git.
 
-
-### 📊 Diagrama da Arquitetura
-
-      ┌─────────────────────────┐
-      │       Controller         │
-      │   (UsuarioController)    │
-      └──────────────┬──────────┘
-                     │
-                     ▼
-      ┌─────────────────────────┐
-      │        Service          │
-      │    (UsuarioService)     │
-      └──────────────┬──────────┘
-                     │
-                     ▼
-      ┌─────────────────────────┐
-      │       Repository         │
-      │  (UsuarioRepository)     │
-      └──────────────┬──────────┘
-                     │
-                     ▼
-      ┌─────────────────────────┐
-      │         Entity           │
-      │       (Usuario)          │
-      └─────────────────────────┘
-
-
----
-
-
-## 🔄 Fluxo do CRUD
-
-        Cliente/API Client
-                │
-                ▼
-        [Controller]
-                │
-                ▼
-        [Service Layer]
-                │
-                ▼
-        [Repository JPA]
-                │
-                ▼
-         [H2 Database]
-
----
-
-## ⚙️ Configurações principais (`application.properties`)
-
-
-spring.application.name=cadastro-usuario
-
-# H2 Console
-spring.h2.console.enabled=true
-spring.h2.console.path=/h2-console
-
-# Banco de dados H2
-spring.datasource.url=jdbc:h2:mem:usuarios
-spring.datasource.driverClassName=org.h2.Driver
-spring.datasource.username=ehl
-spring.datasource.password=
-
-# Criar e dropar tabelas a cada execução
-spring.jpa.hibernate.ddl-auto=create-drop
-
-# Porta do servidor
-server.port=1110
-
----
-
-## ▶️ Como executar o projeto
-✔️ Pré-requisitos
-
-Java 17+
-
-Maven
-
-✔️ Executando
-
+```bash
+git clone https://github.com/EnzoHayashi/CRUD-JAVA-SPRINGBOOT.git
+cd CRUD-JAVA-SPRINGBOOT
 ./mvnw spring-boot:run
+```
 
-A API iniciará em:
+No Windows (PowerShell ou CMD), usar `mvnw.cmd spring-boot:run`.
 
-http://localhost:1110
+A API fica disponível em `http://localhost:1110`.
 
----
+### Configuração principal (`application.properties`)
 
-## 📌 Endpoints da API
+| Propriedade | Valor |
+|---|---|
+| `server.port` | `1110` |
+| `spring.datasource.url` | `jdbc:h2:mem:usuarios` |
+| `spring.jpa.hibernate.ddl-auto` | `create-drop` |
+| `spring.h2.console.path` | `/h2-console` |
 
-Método	Endpoint	Descrição
-GET	/usuarios	Lista todos os usuários
-GET	/usuarios/{id}	Busca um usuário por ID
-POST	/usuarios	Cria um novo usuário
-PUT	/usuarios/{id}	Atualiza um usuário
-DELETE	/usuarios/{id}	Remove um usuário
+## Endpoints
 
-Exemplo JSON (POST/PUT)
+| Método | Endpoint | Descrição |
+|---|---|---|
+| `GET` | `/usuarios` | Lista todos os usuários |
+| `GET` | `/usuarios/{id}` | Busca um usuário por ID |
+| `POST` | `/usuarios` | Cria um novo usuário |
+| `PUT` | `/usuarios/{id}` | Atualiza um usuário |
+| `DELETE` | `/usuarios/{id}` | Remove um usuário |
 
-{
-  "nome": "João Silva",
-  "email": "joao@email.com",
-}
+## Exemplos de utilização
 
----
+Criar um usuário:
 
-## 🧪 Banco de Dados H2
+```bash
+curl -X POST http://localhost:1110/usuarios \
+  -H "Content-Type: application/json" \
+  -d '{"nome": "João Silva", "email": "joao@email.com"}'
+```
 
-📍 Acesse o console:
+Listar usuários:
 
-http://localhost:1110/h2-console
+```bash
+curl http://localhost:1110/usuarios
+```
 
+Atualizar um usuário:
 
-📌 Configurações:
+```bash
+curl -X PUT http://localhost:1110/usuarios/1 \
+  -H "Content-Type: application/json" \
+  -d '{"nome": "João da Silva", "email": "joao@email.com"}'
+```
 
-JDBC URL: jdbc:h2:mem:usuarios
+Excluir um usuário:
 
-Usuário: ehl
+```bash
+curl -X DELETE http://localhost:1110/usuarios/1
+```
 
-Senha:
+### Console do H2
 
----
+Com a aplicação em execução, acessar `http://localhost:1110/h2-console` e usar:
 
-## 🧾 Licença
+- **JDBC URL:** `jdbc:h2:mem:usuarios`
+- **Usuário:** `ehl`
+- **Senha:** (vazia)
 
-Projeto desenvolvido para estudos e prática de APIs REST com Java e Spring Boot.
+> Credenciais restritas ao ambiente de desenvolvimento local.
+
+<!-- Evidências: adicionar prints do Postman e do console H2 em docs/ e referenciar aqui.
+![Criação de usuário](docs/post-usuario.png) -->
+
+## Desafios e aprendizados
+
+- Estruturação de um projeto Spring Boot em camadas (controller, service, repository e entity).
+- Mapeamento de entidades com JPA/Hibernate e uso do H2 em memória.
+- Teste manual dos endpoints REST com Postman e inspeção dos dados pelo console do H2.
+
+## Melhorias futuras
+
+- Validação de entrada com Bean Validation (`@Valid`, `@NotBlank`, `@Email`).
+- Tratamento centralizado de exceções com respostas HTTP padronizadas (`@ControllerAdvice`).
+- Uso de DTOs para separar o contrato da API do modelo de dados.
+- Testes automatizados (JUnit e MockMvc) para o service e o controller.
+- Documentação interativa da API com Swagger/OpenAPI.
+- Troca do H2 por um banco persistente (PostgreSQL ou MySQL), com perfis de configuração por ambiente.
